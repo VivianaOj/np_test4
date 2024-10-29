@@ -1,0 +1,69 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <Copyright>Copyright © Nop Solutions, Ltd</Copyright>
+    <Company>Nop Solutions, Ltd</Company>
+    <Authors>Nop Solutions, Ltd</Authors>
+    <Version>4.2.0.0</Version>
+    <Description>The project contains a set of classes for testing of web projects</Description>
+    <PackageLicenseUrl>http://www.nopcommerce.com/licensev3.aspx</PackageLicenseUrl>
+    <PackageProjectUrl>http://www.nopcommerce.com/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/nopSolutions/nopCommerce</RepositoryUrl>
+    <RepositoryType>Git</RepositoryType>
+  </PropertyGroup>
+<PropertyGroup>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+</PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Admin\Controllers\CategoryControllerTests.cs" />
+    <Compile Include="Admin\Infrastructure\AutoMapperConfigurationTest.cs" />
+    <Compile Include="Admin\Validators\Catalog\CategoryValidatorTests.cs" />
+    <Compile Include="Admin\Validators\Catalog\ManufacturerValidatorTests.cs" />
+    <Compile Include="Admin\Validators\Vendors\VendorValidatorTests.cs" />
+    <Compile Include="Events\DateTimeConsumer.cs" />
+    <Compile Include="Events\EventsTests.cs" />
+    <Compile Include="Public\Models\News\HomepageNewsItemsModelTests.cs" />
+    <Compile Include="Public\Models\Polls\PollModelTests.cs" />
+    <Compile Include="Public\Validators\BaseValidatorTests.cs" />
+    <Compile Include="Public\Validators\Blogs\BlogPostValidatorTests.cs" />
+    <Compile Include="Public\Validators\Boards\EditForumPostValidatorTests.cs" />
+    <Compile Include="Public\Validators\Boards\EditForumTopicValidatorTests.cs" />
+    <Compile Include="Public\Validators\Catalog\ProductEmailAFriendValidatorTests.cs" />
+    <Compile Include="Public\Validators\Catalog\ProductReviewsValidatorTests.cs" />
+    <Compile Include="Public\Validators\Common\AddressValidatorTests.cs" />
+    <Compile Include="Public\Validators\Common\ContactUsValidatorTests.cs" />
+    <Compile Include="Public\Validators\Common\ContactVendorValidatorTests.cs" />
+    <Compile Include="Public\Validators\CreditCardValidatorTests.cs" />
+    <Compile Include="Public\Validators\Customer\ChangePasswordValidatorTests.cs" />
+    <Compile Include="Public\Validators\Customer\CustomerInfoValidatorTests.cs" />
+    <Compile Include="Public\Validators\Customer\LoginValidatorTests.cs" />
+    <Compile Include="Public\Validators\Customer\PasswordRecoveryConfirmValidatorTests.cs" />
+    <Compile Include="Public\Validators\Customer\PasswordRecoveryValidatorTests.cs" />
+    <Compile Include="Public\Validators\Customer\RegisterValidatorTests.cs" />
+    <Compile Include="Public\Validators\Install\InstallValidatorTests.cs" />
+    <Compile Include="Public\Validators\PasswordValidatorTests.cs" />
+    <Compile Include="Public\Validators\Person.cs" />
+    <Compile Include="Public\Validators\PrivateMessages\SendPrivateMessageValidatorTests.cs" />
+    <Compile Include="Public\Validators\ShoppingCart\WishlistEmailAFriendValidatorTests.cs" />
+    <Compile Include="Public\Validators\TestValidator.cs" />
+    <Compile Include="Public\Validators\UsernameValidatorTests.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Admin\Readme.txt" />
+    <None Include="Public\Readme.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.1.0" />
+    <PackageReference Include="NUnit" Version="3.12.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.13.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Presentation\Nop.Web\Nop.Web.csproj" />
+    <ProjectReference Include="..\Nop.Tests\Nop.Tests.csproj" />
+  </ItemGroup>
+
+</Project>
