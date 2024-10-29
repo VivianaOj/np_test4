@@ -1,0 +1,15 @@
+﻿@model PackingSummaryModel
+
+<div asp-validation-summary="All"></div>
+<input asp-for="Id" type="hidden" />
+
+<div class="content">
+    <div class="form-horizontal">
+        <nop-panels id="company-panels">
+            <nop-panel asp-name="packing-info" asp-icon="fa fa-info" asp-title="@T("Admin.NNboxGenerator.packing.Info")" asp-hide-block-attribute-name="" asp-hide="false">@await Html.PartialAsync("_CreateOrUpdate.Info", Model)</nop-panel>
+            @*<nop-panel asp-name="company-customers" asp-icon="fa fa-address-book-o" asp-title="@T("Admin.Companies.Companies.Customers")" asp-hide-block-attribute-name="" asp-hide="false">@await Html.PartialAsync("_CreateOrUpdate.Customers", Model)</nop-panel>
+            <nop-panel asp-name="company-orders" asp-icon="fa fa-cart-plus" asp-title="@T("Admin.Companies.Companies.Orders")" asp-hide-block-attribute-name="" asp-hide="false">@await Html.PartialAsync("_CreateOrUpdate.Orders", Model)</nop-panel>
+            <nop-panel asp-name="company-address" asp-icon="fa fa-address-book-o" asp-title="@T("Admin.Companies.Companies.Addresses")" asp-hide-block-attribute-name="" asp-hide="false">@await Html.PartialAsync("_CreateOrUpdate.Addresses", Model)</nop-panel>*@
+        </nop-panels>
+    </div>
+</div>

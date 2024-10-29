@@ -1,0 +1,124 @@
+﻿@model Nop.Plugin.Misc.NNBoxGenerator.Models.PackingSummaryModel
+@{
+    Layout = "_AdminLayout";
+    var adminAreaSettings = EngineContext.Current.Resolve<AdminAreaSettings>();
+}
+<div class="panel-group">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            @T("Nop.Plugin.Misc.PackingSummary")
+        </div>
+        <div class="panel-body">
+            @*<div class="sub-panel panel-search">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-6">
+
+                                <div class="form-group">
+                                    <div class="col-md-3">
+                                        <nop-label asp-for="BSPackedOrderModel.OrderId" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <input class="form-control text-box single-line" id="Name" name="Name" type="text">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-md-9 col-md-offset-3">
+                                        <button type="button" id="search-BSPackedOrderModel" class="btn btn-primary btn-search">
+                                            <i class="fa fa-search"></i>
+                                            @T("Admin.Common.Search")
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>*@
+            @await Html.PartialAsync("Table", new DataTablesModel
+       {
+           Name = "BSPackedOrderModel-grid",
+           UrlRead = new DataUrl("List", "PackingSummary", null),
+           UrlDelete = new DataUrl("Delete", "PackingSummary", null),
+           UrlUpdate = new DataUrl("Edit", "PackingSummary", null),
+           SearchButtonId = "search-BSPackedOrderModel",
+           Length = adminAreaSettings.DefaultGridPageSize,
+           LengthMenu = adminAreaSettings.GridPageSizes,
+           Filters = new List<FilterParameter>
+                   {
+                       new FilterParameter(nameof(BSPackedOrderModel.OrderId)),
+                   },
+           ColumnCollection = new List<ColumnProperty>
+                   {
+                    new ColumnProperty(nameof(BSPackedOrderModel.Name))
+                    {
+                       Title = T("Nop.Plugin.Shipping.NNBoxSelector.Fields.Name").Text,
+                       Editable = false,
+                       EditType = EditType.String
+                    },
+
+                    new ColumnProperty(nameof(BSPackedOrderModel.CustomerEmail))
+                   {
+                       Title = T("Nop.Plugin.Shipping.NNBoxSelector.Fields.Email").Text,
+                       Editable = false,
+                       EditType = EditType.String
+                   },
+
+                    new ColumnProperty(nameof(BSPackedOrderModel.OrderId))
+                   {
+                       Title = T("Nop.Plugin.Shipping.NNBoxSelector.Fields.OrderNP").Text,
+                       Editable = false,
+                       EditType = EditType.String
+                   },
+                   //new ColumnProperty(nameof(BSPackedOrderModel.OrderNSId))
+                   //{
+                   //    Title = T("Nop.Plugin.Shipping.NNBoxSelector.Fields.tranId").Text,
+                   //    Editable = false,
+                   //    EditType = EditType.String
+                   //},
+
+                   new ColumnProperty(nameof(BSPackedOrderModel.DateUpdated))
+                   {
+                       Title = T("Nop.Plugin.Shipping.NNBoxSelector.Fields.DateCreated").Text,
+                       Editable = false,
+                       EditType = EditType.String
+                   },
+                   new ColumnProperty(nameof(BSPackedOrderModel.DateCreated))
+                   {
+                       Title = T("Nop.Plugin.Shipping.NNBoxSelector.Fields.dateupdated").Text,
+                       Editable = false,
+                       EditType = EditType.String
+                   },
+                   new ColumnProperty(nameof(BSPackedOrderModel.Active))
+                   {
+                       Title = T("Nop.Plugin.Shipping.NNBoxSelector.Fields.ActivePacking").Text,
+                       Editable = false,
+                       EditType = EditType.Checkbox
+                   },
+                    new ColumnProperty(nameof(BSPackedOrderModel.IsCommercial))
+                   {
+                       Title = T("Nop.Plugin.Shipping.NNBoxSelector.Fields.IsCommercial").Text,
+                       Editable = false,
+                       EditType = EditType.Checkbox
+                   },
+                   // new ColumnProperty(nameof(BSPackedOrderModel.Id))
+                   //{
+                   //    Title = T("Admin.Common.Edit").Text,
+                   //    Width = "100",
+                   //    ClassName = NopColumnClassDefaults.Button,
+                   //    Render = new RenderButtonsInlineEdit()
+                   //},
+
+               new ColumnProperty(nameof(BSPackedOrderModel.Id))
+               {
+                    Title = T("Admin.Common.View").Text,
+                    Width = "100",
+                    ClassName = NopColumnClassDefaults.Button,
+                    Render = new RenderButtonView(new DataUrl("View"))
+               },
+
+           }
+       })
+        </div>
+    </div>
+</div>

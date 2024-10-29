@@ -1,0 +1,11 @@
+﻿{
+  "Group": "Shipping",
+  "FriendlyName": "N&N BoxSelector",
+  "SystemName": "Shipping.NNBoxSelector",
+  "Version": "1.0",
+  "SupportedVersions": [ "4.20" ],
+  "Author": "PersonalSoft",
+  "DisplayOrder": 1,
+  "FileName": "Nop.Plugin.Shipping.NNBoxSelector.dll",
+  "Description": "This plugin select the best box packing selector by N&N"
+}

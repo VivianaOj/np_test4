@@ -1,0 +1,11 @@
+﻿{
+  "Group": "Tax providers",
+  "FriendlyName": "TaxJar provider",
+  "SystemName": "Tax.TaxJar",
+  "Version": "1.0",
+  "SupportedVersions": [ "4.20" ],
+  "Author": "PersonalSoft",
+  "DisplayOrder": 1,
+  "FileName": "Nop.Plugin.Tax.TaxJar.dll",
+  "Description": "This plugin allows using TaxJar service"
+}

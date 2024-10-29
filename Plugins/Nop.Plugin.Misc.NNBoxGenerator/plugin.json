@@ -1,0 +1,11 @@
+﻿{
+  "Group": "Misc",
+  "FriendlyName": "NN Box Generator",
+  "SystemName": "Misc.NNBoxGenerator",
+  "Version": "1.0",
+  "SupportedVersions": [ "4.20" ],
+  "Author": "PersonalSoft",
+  "DisplayOrder": 1,
+  "FileName": "Nop.Plugin.Misc.NNBoxGenerator.dll",
+  "Description": "This plugin allows Box Generator for UPS"
+}

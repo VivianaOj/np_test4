@@ -1,0 +1,34 @@
+@model CustomerModel
+
+<div class="panel-body">
+    @*@await Html.PartialAsync("Table", new DataTablesModel
+{
+    Name = "activityNetsuiteImportlog-grid",
+    UrlRead = new DataUrl("ListActivityLog", "NetSuiteImporter", null),
+    Length =10,// Model.CustomerActivityLogSearchModel.PageSize,
+    LengthMenu =Model.CustomerActivityLogSearchModel.AvailablePageSizes,
+    ColumnCollection = new List<ColumnProperty>
+        {
+            new ColumnProperty(nameof(LogNetsuiteImportModel.ImportName))
+            {
+                Title = T("Admin.Customers.Customers.ActivityLog.ImportName").Text,
+                Width = "300"
+            },
+            new ColumnProperty(nameof(LogNetsuiteImportModel.DataFromNetsuite))
+            {
+                Title = T("Admin.Customers.Customers.ActivityLog.DataFromNetsuite").Text,
+                Width = "100"
+            },
+            new ColumnProperty(nameof(LogNetsuiteImportModel.DataUpdatedNetsuite))
+            {
+                Title = T("Admin.Customers.Customers.ActivityLog.DataUpdatedNetsuite").Text
+            },
+            new ColumnProperty(nameof(LogNetsuiteImportModel.DateCreate))
+            {
+                Title = T("Admin.Customers.Customers.ActivityLog.CreatedOn").Text,
+                Width = "200",
+                Render = new RenderDate()
+            }
+        }
+})*@
+</div>

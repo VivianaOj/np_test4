@@ -1,0 +1,73 @@
+﻿@{
+    Layout = "";
+}
+@model Nop.Plugin.Payments.AuthorizeNet.Models.PaymentInfoModel
+
+<div class="row text-payment-info">
+    <div class="col-lg-12 text-left">
+        <div class="row justify-content-center mt-2">
+            <div class="col-lg-4">
+                @Html.LabelFor(model => model.CardholderName, false)
+            </div>
+            <div class="col-lg-8">
+                @Html.TextBoxFor(model => model.CardholderName, new { style = "Width: 100%;", autocomplete = "off", @maxlength = 50, @onkeyup = "validateCardNameKey()" })
+                @Html.ValidationMessageFor(model => model.CardholderName)
+                <div id="CardNameJs" class="field-validation-error">@T("payment.cardholdername.required")</div>
+            </div>
+        </div>
+        <div class="row justify-content-center mt-2">
+            <div class="col-lg-4">
+                @Html.LabelFor(model => model.CardNumber, false)
+            </div>
+            <div class="col-lg-8">
+                @Html.TextBoxFor(model => model.CardNumber, new { style = "Width: 100%;", autocomplete = "off", maxlength = 16, @onkeyup = "validateCardNumberKey()", @onkeypress="return isNumber(event)" , @onchange = "checkDigit(this)"})
+                @Html.ValidationMessageFor(model => model.CardNumber)
+                <div id="CardNumberJs" class="field-validation-error">@T("payment.cardnumber.required")</div>
+            </div>
+        </div>
+        <div class="row justify-content-center mt-2">
+            <div class="col-lg-4">
+                @Html.LabelFor(model => model.ExpireMonth, false)
+            </div>
+            <div class="col-lg-8">
+                @Html.DropDownListFor(model => model.ExpireMonth, Model.ExpireMonths, new { @onchange = "validateDate()" })
+                /
+                @Html.DropDownListFor(model => model.ExpireYear, Model.ExpireYears, new { @onchange = "validateDate()" })
+
+
+                <div id="DateJs" class="field-validation-error">@T("payment.date.required")</div>
+            </div>
+        </div>
+        <div class="row justify-content-center mt-2">
+            <div class="col-lg-4">
+                @Html.LabelFor(model => model.CardCode, false)
+            </div>
+            <div class="col-lg-8">
+                @Html.TextBoxFor(model => model.CardCode, new { style = "Width: 60px;", autocomplete = "off", maxlength = 4, @onkeyup = "validateCardCodeKey()" })
+                @Html.ValidationMessageFor(model => model.CardCode)
+                <div id="CardCodeJs" class="field-validation-error">@T("payment.cardcode.required")</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    function checkDigit(event){ 
+        var  str = document.getElementById(event.id).value;
+        for (var i = 0; i < str.length; i++) {
+            if (isNaN(str.charAt(i))) { //is not number
+                    document.getElementById(event.id).value = "";
+            }
+        }    
+    }
+    function isNumber(evt) {
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        }
+        return true;
+    }
+    </script>
+
+</div>
+

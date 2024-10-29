@@ -1,0 +1,394 @@
+﻿@model Nop.Plugin.Misc.NNBoxGenerator.Models.BoxGeneratorList
+@{
+    Layout = "_AdminLayout";
+    var adminAreaSettings = EngineContext.Current.Resolve<AdminAreaSettings>
+    ();
+}
+<div class="content-header clearfix">
+    <h1 class="pull-left">
+        @T("Admin.packing.EditPacking")
+        <small>
+            <i class="fa fa-arrow-circle-left"></i>
+            <a asp-action="PackingSummary">@T("Admin.Companies.Companies.BackToList")</a>
+        </small>
+    </h1>
+    <div class="pull-right">
+
+    </div>
+</div>
+
+<div class="content">
+    <div class="form-horizontal">
+        <nop-panels id="company-panels">
+
+            <nop-panel asp-name="customer-info" asp-icon="fa fa-info" asp-title="@T(" Admin.customer.Info")" asp-hide-block-attribute-name="customer" asp-hide="false">
+                <div class="panel-body">
+                    @if (Model.Customer != null)
+                    {
+                        @*<div class="form-group">
+                <div class="col-md-3">
+                    <label>@T("Admin.Customers.Company.Fields.email")</label>
+                </div>
+                <div class="col-md-9">
+                    <div class="form-text-row">@Html.Raw(Model.Customer.Email)</div>
+                </div>
+            </div>*@
+
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <label>@T("Admin.Customers.Company.Fields.Name")</label>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="form-text-row">@Html.Raw(Model.Customer.BillingAddress?.FirstName) @Html.Raw(Model.Customer.BillingAddress?.LastName)</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <label>@T("Admin.Customers.Company.Fields.companyName")</label>
+                            </div>
+
+                            @if (Model.Customer.Companies.Any())
+                            {
+                                var company = Model.Customer.CompanyCustomerMappings.Where(r => r.DefaultCompany).FirstOrDefault();
+                                if (company != null)
+                                {
+                                    <div class="col-md-9">
+                                        <div class="form-text-row">@Html.Raw(company.Company.CompanyName) </div>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="col-md-9">
+                                    <div class="form-text-row">@Html.Raw(Model.Customer.BillingAddress?.Company) </div>
+                                </div>
+                            }
+
+
+
+
+                        </div>
+
+                    }
+                    @*@if (Model.Company != null)
+        {
+            <div class="form-group">
+                <div class="col-md-3">
+                    <label>@T("Admin.Customers.Company.Fields.CompanyName")</label>
+                </div>
+                <div class="col-md-9">
+                    <div class="form-text-row">@Html.Raw(Model.Company.CompanyName)</div>
+                </div>
+            </div>
+        }*@
+                    @if (Model.Order != null)
+                    {
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <label>@T("Address.OrderNPId")</label>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="form-text-row">@Html.Raw(Model.Order.Id)</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <label>@T("Address.OrderNSId")</label>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="form-text-row">@Html.Raw(Model.Order.tranId)</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <label>@T("Address.BillingAddress")</label>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="form-text-row">
+                                    @Html.Raw(Model.Order.BillingAddress.FirstName + " " + Model.Order.BillingAddress.LastName)
+                                </div>
+                                <div class="form-text-row">
+                                    @Html.Raw(Model.Order.BillingAddress.Address1 + " " + Model.Order.BillingAddress.City + ", " + Model.Order.BillingAddress.StateProvince.Name
++ " " + Model.Order.BillingAddress.ZipPostalCode)
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <label>@T("Address.ShippingAddress")</label>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="form-text-row">
+                                    @Html.Raw(Model.Order.ShippingAddress.FirstName + " " + Model.Order.ShippingAddress.LastName)
+                                </div>
+                                <div class="form-text-row">
+                                    @Html.Raw(Model.Order.ShippingAddress.Address1 + " " + Model.Order.ShippingAddress.City + ", " + Model.Order.ShippingAddress.StateProvince.Name
++ " " + Model.Order.ShippingAddress.ZipPostalCode)
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <label>@T("Address.OrderShipping")</label>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="form-text-row">@Html.Raw(Model.Order.OrderShippingExclTax)</div>
+                            </div>
+                        </div>
+
+                    }
+
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <label>@T("Nop.Plugin.Shipping.NNBoxSelector.Fields.IsCommercial")</label>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="form-text-row">@Html.Raw(Model.ShippingOptions.FirstOrDefault()?.IsCommercial)</div>
+                        </div>
+                    </div>
+                </div>
+            </nop-panel>
+            <nop-panel asp-name="ShippingOptions-info" asp-icon="fa fa-info" asp-title="@T(" Admin.customer.ShippingOptions")" asp-hide-block-attribute-name="ShippingOptions" asp-hide="false">
+                <div class="panel-body">
+                    @{
+
+                        var ShippingOptions = Model.ShippingOptions.OrderBy(r => r.Rate).ToList();
+                        foreach (var item in ShippingOptions)
+                        {
+                    <div class="form-group">
+
+                        <div class="col-md-9">
+                            @Html.Raw(item.Name) (@string.Format("{0:C}", item.Rate))
+                        </div>
+                    </div>
+                            }
+                        }
+                </div>
+            </nop-panel>
+            @foreach (var item in Model.BoxGenerator)
+            {
+                var BoxName = Html.Raw(item.BoxName);
+                if (item.IsAsShip)
+                {
+                    BoxName = Html.Raw(@T("Admin.packing.ownBox"));
+                }
+
+                    <nop-panel asp-name="company-info" asp-icon="fa fa-info" asp-title="@T(" Admin.packing.Info") @BoxName" asp-hide-block-attribute-name="packing" asp-hide="false">
+
+                        <div class="panel-body">
+                            @if (item.IsAsShip)
+                            {
+                                <div class="form-group">
+                                    <div class="col-md-3">
+                                        <label>@T("Admin.packing.ownBoxType") @T("Admin.packing.ownBox")</label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="form-text-row">@Html.Raw(item.BoxName)</div>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="form-group">
+                                    <div class="col-md-3">
+                                        <nop-label asp-for="@item.BoxName" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="form-text-row">@Html.Raw(item.BoxName)</div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-3">
+                                        <nop-label asp-for="@item.BoxSize" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="form-text-row">@Html.Raw(item.BoxSize)</div>
+                                    </div>
+                                </div>
+                            }
+
+
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="@item.BoxContentWeight" />
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="form-text-row">@string.Format("{0:C}", item.BoxContentWeight) </div>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="@item.BoxTotalWeight" />
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="form-text-row">@string.Format("{0:C}", item.BoxTotalWeight) </div>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="@item.Height" />
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="form-text-row">@Html.Raw(item.Height)</div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="@item.Width" />
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="form-text-row">@Html.Raw(item.Width)</div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="@item.Length" />
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="form-text-row">@Html.Raw(item.Length)</div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="@item.FinalBoxTotalWeight" />
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="form-text-row">@Html.Raw(item.FinalBoxTotalWeight)</div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="@item.TotalVolumenBox" />
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="form-text-row">@string.Format("{0:#,##0}", item.TotalVolumenBox) </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="@item.VolumenBox" />
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="form-text-row">@string.Format("{0:#,##0}", item.VolumenBox) </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="@item.PercentBoxVolumePacked" />
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="form-text-row">@item.PercentBoxVolumePacked% </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                        <div class="panel-body">
+                        </div>
+
+                        <div class="panel-body">
+
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <div class="col-md-12" style="overflow-x: auto;">
+                                        <script>
+                                            function toggleOrderItemEdit(id) {
+                                                location.href = "/Admin/Product/Edit/" + id;
+                                            }
+                                        </script>
+
+
+                                        <table class="table table-hover table-bordered">
+                                            <col />
+                                            <col />
+
+
+
+                                            <thead>
+                                                <tr>
+                                                    @*
+                                                <th>
+                                                    @T("Admin.Orders.Products.Picture")
+                                                </th>*@
+                                                    <th>
+                                                        @T("Admin.Orders.Products.ProductName")
+                                                    </th>
+
+
+                                                    <th>
+                                                        @T("Admin.Orders.Products.Quantity")
+                                                    </th>
+                                                    <th>
+                                                        @T("Admin.Orders.Products.View")
+                                                    </th>
+
+
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var itemProduct in item.PackedItems)
+                                                {
+                                                    <tr>
+                                                        @*
+                                                    <td class="text-center">
+                                                        <img src="@item.PictureThumbnailUrl" alt="" title="" />
+                                                    </td>*@
+                                                        <td style="width: 15%;" class="text-left">
+                                                            <em><a asp-controller="Product" asp-action="Edit" asp-route-id="@itemProduct.Id">@itemProduct.ProductName</a></em>
+
+                                                            @if (!string.IsNullOrEmpty(itemProduct.Sku))
+                                                            {
+                                                                <p>
+                                                                    <strong>@T("Admin.Orders.Products.SKU")</strong><text>:</text>
+                                                                    @itemProduct.Sku
+                                                                </p>
+                                                            }
+
+
+                                                        </td>
+
+                                                        <td style="width: 10%;" class="text-center">
+                                                            <div>@itemProduct.Quantity</div>
+                                                            <div id="pnlEditPvQuantity@(item.Id)">
+
+                                                            </div>
+                                                        </td>
+                                                        <td style="width: 10%;" class="text-center">
+                                                            <button type="submit" class="btn btn-default" name="btnEditOrderItem@(itemProduct.Id)" onclick="toggleOrderItemEdit(@itemProduct.Id);return false;" id="btnEditOrderItem@(itemProduct.Id)">
+                                                                <i class="fa fa-eye"></i>
+                                                                @T("Admin.Common.View")
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </nop-panel>
+
+
+                }
+            </nop-panels>
+
+    </div>
+</div>

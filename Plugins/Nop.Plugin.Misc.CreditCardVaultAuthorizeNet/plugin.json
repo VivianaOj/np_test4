@@ -1,0 +1,11 @@
+﻿{
+  "Group": "Misc",
+  "FriendlyName": "Credit Card Vault AuthorizeNet",
+  "SystemName": "Misc.CreditCardVaultAuthorizeNet",
+  "Version": "1.0",
+  "SupportedVersions": [ "4.20" ],
+  "Author": "PersonalSoft",
+  "DisplayOrder": 1,
+  "FileName": "Nop.Plugin.Misc.CreditCardVaultAuthorizeNet.dll",
+  "Description": "This plugin allows storing customer credit cards using Authorize .Net service"
+}

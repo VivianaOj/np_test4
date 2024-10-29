@@ -1,0 +1,11 @@
+﻿{
+  "Group": "Shipping",
+  "FriendlyName": "N&N Delivery",
+  "SystemName": "Shipping.NNDelivery",
+  "Version": "1.0",
+  "SupportedVersions": [ "4.20" ],
+  "Author": "PersonalSoft",
+  "DisplayOrder": 1,
+  "FileName": "Nop.Plugin.Shipping.NNDelivery.dll",
+  "Description": "This plugin offers shipping rates by N&N"
+}

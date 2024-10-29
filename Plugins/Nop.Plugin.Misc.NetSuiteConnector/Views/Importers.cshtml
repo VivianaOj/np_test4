@@ -1,0 +1,773 @@
+﻿@model List<NetSuiteImporterModel>
+@using Nop.Web.Framework.Models.DataTables
+@{
+    Layout = "_AdminLayout";
+}
+
+@{
+    //page title
+    ViewBag.Title = T("Plugins.Misc.NetSuiteConnector.Importer.Importers").Text;
+    //active menu item (system name)
+    Html.SetActiveMenuItemSystemName(NetSuiteConnectorDefaults.ImporterMenuSystemName);
+
+    const string hideInfoBlockAttributeName = "CustomerPage.HideInfoBlock";
+    var hideInfoBlock = genericAttributeService.GetAttribute<bool>(workContext.CurrentCustomer, hideInfoBlockAttributeName);
+
+    const string hideActivityLogBlockAttributeName = "CustomerPage.HideActivityLogBlock";
+    var hideActivityLogBlock = genericAttributeService.GetAttribute<bool>(workContext.CurrentCustomer, hideActivityLogBlockAttributeName, defaultValue: true);
+
+
+
+}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+<nop-antiforgery-token />
+<div class="content-header clearfix">
+    <h1 class="pull-left">
+        @T("Plugins.Misc.NetSuiteConnector.Importer.Importers")
+    </h1>
+</div>
+<div class="content">
+    <div class="form-horizontal">
+        <div class="panel-group">
+
+            <div class="content">
+                <div class="form-horizontal">
+                    <nop-panels id="company-panels">
+                        @{
+                            foreach (var importer in Model)
+                            {
+                            <nop-panel asp-name="customer-info_@importer.Name" asp-icon="	fa fa-cloud-download" asp-title=@importer.Name asp-hide-block-attribute-name="customer_@importer.Name" asp-hide="true">
+                                <table style="margin-top: 20px; ">
+                                    <tr>
+                                        @if (importer.ActionName == "ImportCustomers")
+                                            {
+
+                                        <td style="padding-left: 20px;">
+                                            <select name="LastModified" id="LastModified" onchange="ValidateInput(this.value)">
+                                                @if (importer.ActiveAll == "1")
+                                                        {
+                                                <option value="All">All </option>
+                                                        }
+                                                <option value="LastUpdate">Last Update </option>
+                                                <option value="SpecificCustomerId">Specific Customer Id </option>
+                                            </select>
+                                        </td>
+                                        <td style="padding-left: 20px;">
+                                            <div id="InfoCustomer" style="display:none;">
+                                                @T("Plugins.Misc.NetSuiteConnector.Importer.CustomerId")
+                                                <input name="IdCustomer" id="IdCustomer" />
+                                            </div>
+                                        </td>
+
+                                            }
+                                        @if (importer.ActionName == "ImportOrders")
+                                            {
+
+                                        <td style="padding-left: 20px;">
+                                            <select name="LastModifiedOrder" id="LastModifiedOrder" onchange="ValidateInputOrder(this.value)">
+                                                @if (importer.ActiveAll == "1")
+                                                        {
+                                                <option value="All">All </option>
+                                                        }
+                                                <option value="LastUpdate">Last Update </option>
+                                                <option value="SpecificCustomerId">Specific Customer Id </option>
+                                            </select>
+                                        </td>
+                                        <td style="padding-left: 20px;">
+                                            <div id="InfoOrder" style="display:none;">
+                                                @T("Plugins.Misc.NetSuiteConnector.Importer.CompanyId")
+                                                <input name="IdOrder" id="IdOrder" />
+                                            </div>
+                                        </td>
+
+                                            }
+
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @if (importer.ActionName == "ImportCustomers")
+                                                {
+                                            <a id="Button_@importer.ActionName" onclick="ImportData('@importer.ActionName')" class="btn bg-green importButtonStye">@T("Plugins.Misc.NetSuiteConnector.Importer.ImportNow")</a>
+                                                }
+                                                else if (importer.ActionName == "ImportOrders")
+                                                {
+                                            <a id="Button_@importer.ActionName" onclick="ImportData('@importer.ActionName')" class="btn bg-green importButtonStye">@T("Plugins.Misc.NetSuiteConnector.Importer.ImportNow")</a>
+                                                }
+                                                else if (importer.ActionName == "ImportProducts")
+                                                {
+                                            <a id="Button_@importer.ActionName" onclick="ImportDataProduct('@importer.ActionName')" class="btn bg-green importButtonStye">@T("Plugins.Misc.NetSuiteConnector.Importer.ImportNow")</a>
+                                                }
+                                                else if (importer.ActionName == "ImportExportAPi")
+                                                {
+                                                 }
+                                                else
+                                                {
+                                            <a id="Button_@importer.ActionName" onclick="ImportData('@importer.ActionName')" class="btn bg-green importButtonStye">@T("Plugins.Misc.NetSuiteConnector.Importer.ImportNow")</a>
+                                                }
+
+
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                </table>
+
+
+                                @if (importer.ActionName == "ImportProducts")
+                                    {
+                                        if (importer.ProductLogs?.Count() > 0)
+                                        {
+
+
+                                @foreach (var logs in importer.ProductLogs.Take(3))
+                                            {
+                                <div class="panel-body">
+                                    <table class="table table-bordered table-hover table-striped dataTable no-footer tableLogs" width="100%" id="import-tasks-grid" role="grid" aria-describedby="import-tasks-grid_info" style="width: 100%;">
+                                        <thead>
+                                            <tr role="row" style="height: 0px;">
+                                                <th class="sorting_disabled">@T("Plugins.Misc.NetSuiteConnector.Importer.LastExecutionDate")</th>
+                                                <th class="sorting_disabled">@T("Plugins.Misc.NetSuiteConnector.Importer.Failed")</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    @logs.LastExecutionDate
+                                                </td>
+                                                <td>
+                                                    @if (logs.Logs.Count() > 0)
+                                                                    {
+                                                    <div class="tableLogs">
+                                                        <table>
+                                                            @foreach (var x in logs.Logs)
+                                                                                {
+                                                            <tr>
+                                                                <td>
+                                                                    <a target="_blank" href="/Admin/Log/View/@x.Link">@x.Name</a>
+                                                                </td>
+                                                            </tr>
+                                                                                }
+                                                        </table>
+                                                    </div>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                    @T("Successed")
+                                                                    }
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                            }
+                                        }
+                                        else
+                                        {
+                                <div class="panel-body">
+                                    <table class="table table-bordered table-hover table-striped dataTable no-footer tableLogs" width="100%" id="import-tasks-grid" role="grid" aria-describedby="import-tasks-grid_info" style="width: 100%;">
+                                        <thead>
+                                            <tr role="row" style="height: 0px;">
+                                                <th class="sorting_disabled">@T("Plugins.Misc.NetSuiteConnector.Importer.LastExecutionDate")</th>
+                                                <th class="sorting_disabled">@T("Plugins.Misc.NetSuiteConnector.Importer.Failed")</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    @importer.LastExecutionDate
+                                                </td>
+                                                <td>
+                                                    @T("Successed")
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                        }
+                                    }
+
+                                @if (importer.ActionName == "ImportCustomers")
+                                    {
+                                        if (importer.CustomerLogsIssue?.Count() > 0)
+                                        {
+
+                                @foreach (var logs in importer.CustomerLogsIssue?.Take(3))
+                                            {
+                                <div class="panel-body">
+                                    <table class="table table-bordered table-hover table-striped dataTable no-footer tableLogs" width="100%" id="import-tasks-grid" role="grid" aria-describedby="import-tasks-grid_info" style="width: 100%;">
+                                        <thead>
+                                            <tr role="row" style="height: 0px;">
+                                                <th class="sorting_disabled">@T("Plugins.Misc.NetSuiteConnector.Importer.LastExecutionDate")</th>
+                                                <th class="sorting_disabled">@T("Plugins.Misc.NetSuiteConnector.Importer.Failed")</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    @logs.LastExecutionDate
+                                                </td>
+                                                <td>
+                                                    @if (logs.Logs.Count() > 0)
+                                                                    {
+                                                    <div class="tableLogs">
+                                                        <table>
+                                                            @foreach (var x in logs.Logs)
+                                                                                {
+                                                            <tr>
+                                                                <td>
+                                                                    <a target="_blank" href="/Admin/Log/View/@x.Link">@x.Name</a>
+                                                                </td>
+                                                            </tr>
+
+                                                                                }
+                                                        </table>
+                                                    </div>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                    @T("Successed")
+                                                                    }
+                                                </td>
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+
+
+                                    <div class="panel-body">
+                                        <table class="table table-bordered table-hover table-striped dataTable no-footer tableLogs" width="100%" id="import-tasks-grid" role="grid" aria-describedby="import-tasks-grid_info" style="width: 100%;">
+                                            <thead>
+                                                <tr role="row" style="height: 0px;">
+                                                    @*<th class="sorting_disabled">@T("Plugins.Misc.NetSuiteConnector.Importer.LastExecutionDate")</th>
+                                                        <th class="sorting_disabled">@T("Plugins.Misc.NetSuiteConnector.Importer.Failed")</th>*@
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                                <tr>
+                                                    <td colspan="2">
+                                                        <div class="content">
+                                                            <div class="form-horizontal">
+                                                                <nop-panel asp-name="customer-activitylog" asp-icon="fa fa-list-alt" asp-title="@T("Admin.Customers.Customers.ActivityLog") @importer.LastExecutionDate" asp-hide-block-attribute-name="true" asp-hide="false" asp-advanced="true">@await Html.PartialAsync("~/Plugins/Misc.NetSuiteConnector/Views/_CreateOrUpdate.cshtml", importer.CustomerModel)</nop-panel>
+
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                            }
+
+                                        }
+                                        else
+                                        {
+
+                                <div class="panel-body">
+                                    <table class="table table-bordered table-hover table-striped dataTable no-footer tableLogs" width="100%" id="import-tasks-grid" role="grid" aria-describedby="import-tasks-grid_info" style="width: 100%;">
+                                        <thead>
+                                            <tr role="row" style="height: 0px;">
+                                                @*<th class="sorting_disabled">@T("Plugins.Misc.NetSuiteConnector.Importer.LastExecutionDate")</th>
+                                                    <th class="sorting_disabled">@T("Plugins.Misc.NetSuiteConnector.Importer.Failed")</th>*@
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            <tr>
+                                                <td colspan="2">
+                                                    <div class="content">
+                                                        <div class="form-horizontal">
+                                                            <nop-panel asp-name="customer-activitylog" asp-icon="fa fa-list-alt" asp-title="@T("Admin.Customers.Customers.ActivityLog") @importer.LastExecutionDate" asp-hide-block-attribute-name="true" asp-hide="false" asp-advanced="true">@await Html.PartialAsync("~/Plugins/Misc.NetSuiteConnector/Views/_CreateOrUpdate.cshtml", importer.CustomerModel)</nop-panel>
+
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                        }
+                                    }
+
+                                @if (importer.ActionName == "ImportOrders")
+                                    {
+                                        if (importer.OrderLogs?.Count() > 0)
+                                        {
+                                @foreach (var logs in importer.OrderLogs?.Take(3))
+                                            {
+                                <div class="panel-body">
+                                    <table class="table table-bordered table-hover table-striped dataTable no-footer tableLogs" width="100%" id="import-tasks-grid" role="grid" aria-describedby="import-tasks-grid_info" style="width: 100%;">
+                                        <thead>
+                                            <tr role="row" style="height: 0px;">
+                                                <th class="sorting_disabled">@T("Plugins.Misc.NetSuiteConnector.Importer.LastExecutionDate")</th>
+                                                <th class="sorting_disabled">@T("Plugins.Misc.NetSuiteConnector.Importer.Failed")</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    @logs.LastExecutionDate
+                                                </td>
+                                                <td>
+                                                    @if (logs.Logs.Count() > 0)
+                                                                    {
+                                                    <div class="tableLogs">
+                                                        <table>
+                                                            @foreach (var x in logs.Logs)
+                                                                                {
+                                                            <tr>
+                                                                <td>
+                                                                    <a target="_blank" href="/Admin/Log/View/@x.Link">@x.Name</a>
+                                                                </td>
+                                                            </tr>
+                                                                                }
+                                                        </table>
+                                                    </div>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                    @T("Successed")
+                                                                    }
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                            }
+
+                                        }
+                                        else
+                                        {
+                                <div class="panel-body">
+                                    <table class="table table-bordered table-hover table-striped dataTable no-footer tableLogs" width="100%" id="import-tasks-grid" role="grid" aria-describedby="import-tasks-grid_info" style="width: 100%;">
+                                        <thead>
+                                            <tr role="row" style="height: 0px;">
+                                                <th class="sorting_disabled">@T("Plugins.Misc.NetSuiteConnector.Importer.LastExecutionDate")</th>
+                                                <th class="sorting_disabled">@T("Plugins.Misc.NetSuiteConnector.Importer.Failed")</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    @importer.LastExecutionDate
+                                                </td>
+                                                <td>
+                                                    @T("Successed")
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                        }
+                                    }
+
+                                @if (importer.ActionName == "ImportPendingOrders")
+                                    {
+                                        if (importer.PendingOrdersLogs?.Count() > 0)
+                                        {
+                                @foreach (var logs in importer.PendingOrdersLogs?.Take(3))
+                                            {
+                                <div class="panel-body">
+                                    <table class="table table-bordered table-hover table-striped dataTable no-footer tableLogs" width="100%" id="import-tasks-grid" role="grid" aria-describedby="import-tasks-grid_info" style="width: 100%;">
+                                        <thead>
+                                            <tr role="row" style="height: 0px;">
+                                                <th class="sorting_disabled">@T("Plugins.Misc.NetSuiteConnector.Importer.LastExecutionDate")</th>
+                                                <th class="sorting_disabled">@T("Plugins.Misc.NetSuiteConnector.Importer.Failed")</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    @logs.LastExecutionDate
+                                                </td>
+                                                <td>
+                                                    @if (logs.Logs.Count() > 0)
+                                                                    {
+                                                    <div class="tableLogs">
+                                                        <table>
+                                                            @foreach (var x in logs.Logs)
+                                                                                {
+                                                            <tr>
+                                                                <td>
+                                                                    <a target="_blank" href="/Admin/Log/View/@x.Link">@x.Name</a>
+                                                                </td>
+                                                            </tr>
+                                                                                }
+                                                        </table>
+                                                    </div>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                    @T("Successed")
+                                                                    }
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                            }
+
+                                        }
+                                        else
+                                        {
+                                <div class="panel-body">
+                                    <table class="table table-bordered table-hover table-striped dataTable no-footer tableLogs" width="100%" id="import-tasks-grid" role="grid" aria-describedby="import-tasks-grid_info" style="width: 100%;">
+                                        <thead>
+                                            <tr role="row" style="height: 0px;">
+                                                <th class="sorting_disabled">@T("Plugins.Misc.NetSuiteConnector.Importer.LastExecutionDate")</th>
+                                                <th class="sorting_disabled">@T("Plugins.Misc.NetSuiteConnector.Importer.Failed")</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    @importer.LastExecutionDate
+                                                </td>
+                                                <td>
+                                                    @T("Successed")
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                        }
+                                    }
+
+                                @if (importer.ActionName == "ImportImages")
+                                    {
+                                        if (importer.ImagesLogs?.Count() > 0)
+                                        {
+                                @foreach (var logs in importer.ImagesLogs?.Take(3))
+                                            {
+                                <div class="panel-body">
+                                    <table class="table table-bordered table-hover table-striped dataTable no-footer tableLogs" width="100%" id="import-tasks-grid" role="grid" aria-describedby="import-tasks-grid_info" style="width: 100%;">
+                                        <thead>
+                                            <tr role="row" style="height: 0px;">
+                                                <th class="sorting_disabled">@T("Plugins.Misc.NetSuiteConnector.Importer.LastExecutionDate")</th>
+                                                <th class="sorting_disabled">@T("Plugins.Misc.NetSuiteConnector.Importer.Failed")</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    @logs.LastExecutionDate
+                                                </td>
+                                                <td>
+                                                    @if (logs.Logs.Count() > 0)
+                                                                    {
+                                                    <div class="tableLogs">
+                                                        <table>
+                                                            @foreach (var x in logs.Logs)
+                                                                                {
+                                                            <tr>
+                                                                <td>
+                                                                    <a target="_blank" href="/Admin/Log/View/@x.Link">@x.Name</a>
+                                                                </td>
+                                                            </tr>
+                                                                                }
+                                                        </table>
+                                                    </div>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                    @T("Successed")
+                                                                    }
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                            }
+                                        }
+                                        else
+                                        {
+                                <div class="panel-body">
+                                    <table class="table table-bordered table-hover table-striped dataTable no-footer tableLogs" width="100%" id="import-tasks-grid" role="grid" aria-describedby="import-tasks-grid_info" style="width: 100%;">
+                                        <thead>
+                                            <tr role="row" style="height: 0px;">
+                                                <th class="sorting_disabled">@T("Plugins.Misc.NetSuiteConnector.Importer.LastExecutionDate")</th>
+                                                <th class="sorting_disabled">@T("Plugins.Misc.NetSuiteConnector.Importer.Failed")</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    @importer.LastExecutionDate
+                                                </td>
+                                                <td>
+                                                    @T("Successed")
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                        }
+                                    }
+
+
+                                @if (importer.ActionName == "ImportExportAPi")
+                                    {
+                                        if (importer.ApiLogs?.Count() > 0)
+                                        {
+                                <div class="panel-body">
+                                    <table class="table table-bordered table-hover table-striped dataTable no-footer tableLogs" width="100%" id="import-tasks-grid" role="grid" aria-describedby="import-tasks-grid_info" style="width: 100%;">
+                                        <thead>
+                                            <tr role="row" style="height: 0px;">
+                                                <th class="sorting_disabled">@T("Plugins.Misc.NetSuiteConnector.Importer.IdItem")</th>
+                                                <th class="sorting_disabled">@T("Plugins.Misc.NetSuiteConnector.Importer.Type")</th>
+                                                <th class="sorting_disabled">@T("Plugins.Misc.NetSuiteConnector.Importer.FailedDate")</th>
+                                                <th class="sorting_disabled">@T("Plugins.Misc.NetSuiteConnector.Importer.SuccessDate")</th>
+                                                <th class="sorting_disabled">@T("Plugins.Misc.NetSuiteConnector.Importer.Synchronized")</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var logs in importer.ApiLogs?.Take(30))
+                                                        {
+
+                                            <tr>
+                                                <td>
+                                                    @logs.IdItem
+                                                </td>
+                                                <td>
+                                                    @if (logs.Type == 1)
+                                                                    {<span> Product </span>}
+                                                    @if (logs.Type == 2)
+                                                                    {<span> Customer </span>}
+
+                                                    @if (logs.Type == 3)
+                                                                    {<span> Orders </span>}
+
+                                                    @if (logs.Type == 4)
+                                                                    {<span> Pending send Order </span>}
+                                                    @if (logs.Type == 5)
+                                                                    {<span> Images </span>}
+
+                                                    @if (logs.Type == 6)
+                                                                    {<span> ImportDataFromNetsuite </span>}
+
+                                                    @if (logs.Type == 7)
+                                                                    {<span> Contact Customer </span>}
+
+                                                    @if (logs.Type == 8)
+                                                                    {<span> Invoices </span>}
+
+                                                    @if (logs.Type == 9)
+                                                                    {<span> Send Order NS </span>}
+
+                                                </td>
+                                                <td>
+                                                    @logs.FailedDate
+                                                </td>
+                                                <td>
+                                                    @logs.SuccessDate
+                                                </td>
+                                                <td>
+                                                    @logs.Synchronized
+                                                </td>
+                                            </tr>
+
+                                                        }
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                        }
+
+                                    }
+
+                            </nop-panel>
+
+                            }
+                        }
+
+
+                    </nop-panels>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<style>
+    .buttonload {
+        border: none;
+        color: #04AA6D;
+        font-size: 16px;
+        display: block;
+        width: 10px;
+        background: none;
+        position: fixed;
+        display: none;
+    }
+</style>
+
+<script>
+
+    function ValidateInputOrder(id) {
+        if (id == "SpecificCustomerId") {
+            $("#InfoOrder").css("display", "block");
+
+        } else {
+            $("#InfoOrder").css("display", "none");
+
+        }
+    }
+
+    function ValidateInputProduct(id) {
+        if (id == "SpecificProductId") {
+            $("#InfoProduct").css("display", "block");
+
+        } else {
+            $("#InfoProduct").css("display", "none");
+
+        }
+    }
+
+    function ValidateInput(id) {
+        if (id == "SpecificCustomerId") {
+            $("#InfoCustomer").css("display", "block");
+
+        } else {
+            $("#InfoCustomer").css("display", "none");
+
+        }
+    }
+
+    function ImportData(name) {
+        if (name == "ImportCustomers") {
+            $("#" + name).css("display", "block");
+            $("#Button_" + name).css("pointer-events", "none");
+            $("#Button_" + name).css("opacity", "0.5");
+
+            var customerId = $("#IdCustomer").val();
+            var Type = $("#LastModified").val();
+            var url = "/Admin/NetSuiteImporter/ImportCustomers/";
+
+            $.ajax({
+                cache: false,
+                type: "GET",
+                url: url,
+                data: { "IdCustomer": customerId, "Type": Type },
+                success: function (data, textStatus, jqXHR) {
+                    location.reload();
+                }
+            });
+        }
+
+        if (name == "ImportProducts") {
+            $("#" + name).css("display", "block");
+            $("#Button_" + name).css("pointer-events", "none");
+            $("#Button_" + name).css("opacity", "0.5");
+
+            var IdProduct = $("#IdProduct").val();
+            var TypeProduct = $("#LastModifiedProduct").val();
+            var url = "/Admin/NetSuiteImporter/ImportProducts/";
+
+            $.ajax({
+                cache: false,
+                type: "GET",
+                url: url,
+                data: { "IdCustomer": IdProduct, "Type": TypeProduct },
+                success: function (data, textStatus, jqXHR) {
+
+                    $("#" + name).css("display", "none");
+                    $("#Button_" + name).css("pointer-events", "block");
+                    $("#Button_" + name).css("opacity", "1");
+
+                    location.reload();
+
+
+                }
+            });
+        }
+        if (name == "ImportOrders") {
+            $("#" + name).css("display", "block");
+            $("#Button_" + name).css("pointer-events", "none");
+            $("#Button_" + name).css("opacity", "0.5");
+
+            var IdOrder = $("#IdOrder").val();
+            var TypeOrder = $("#LastModifiedOrder").val();
+            var url = "/Admin/NetSuiteImporter/ImportOrders/";
+
+            $.ajax({
+                cache: false,
+                type: "GET",
+                url: url,
+                data: { "IdCustomer": IdOrder, "Type": TypeOrder },
+                success: function (data, textStatus, jqXHR) {
+                    location.reload();
+                }
+            });
+        }
+        if (name == "ImportPendingOrders") {
+            $("#" + name).css("display", "block");
+            $("#Button_" + name).css("pointer-events", "none");
+            $("#Button_" + name).css("opacity", "0.5");
+
+            //var IdOrder = $("#IdOrder").val();
+            //var TypeOrder = $("#LastModifiedOrder").val();
+            var url = "/Admin/NetSuiteImporter/ImportPendingOrders/";
+
+            $.ajax({
+                cache: false,
+                type: "GET",
+                url: url,
+                success: function (data, textStatus, jqXHR) {
+                    location.reload();
+                }
+            });
+        }
+        if (name == "ImportImages") {
+            $("#" + name).css("display", "block");
+            $("#Button_" + name).css("pointer-events", "none");
+            $("#Button_" + name).css("opacity", "0.5");
+
+            var url = "/Admin/NetSuiteImporter/ImportImages/";
+
+            $.ajax({
+                cache: false,
+                type: "GET",
+                url: url,
+                success: function (data, textStatus, jqXHR) {
+                    location.reload();
+                }
+            });
+        }
+
+
+    }
+
+    function ImportDataProduct(name) {
+
+        if (name == "ImportProducts") {
+            $("#" + name).css("display", "block");
+            $("#Button_" + name).css("pointer-events", "none");
+            $("#Button_" + name).css("opacity", "0.5");
+
+            var IdProduct = $("#IdProduct").val();
+            var TypeProduct = $("#LastModifiedProduct").val();
+            var url = "/Admin/NetSuiteImporter/ImportProducts/";
+
+            $.ajax({
+                cache: false,
+                type: "GET",
+                url: url,
+                data: { "IdCustomer": IdProduct, "Type": TypeProduct },
+                success: function (data, textStatus, jqXHR) {
+                    $("#" + name).css("display", "none");
+                    $("#Button_" + name).css("pointer-events", "block");
+                    $("#Button_" + name).css("opacity", "1");
+                    location.reload();
+                }
+            });
+        }
+
+
+
+    }
+</script>

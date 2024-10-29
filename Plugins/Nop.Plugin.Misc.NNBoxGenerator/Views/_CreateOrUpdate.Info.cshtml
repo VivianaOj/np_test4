@@ -1,0 +1,73 @@
+﻿@model PackingSummaryModel
+
+<div class="panel-body">
+    <div class="form-group">
+        <div class="col-md-3">
+            <nop-label asp-for="BoxName" />
+        </div>
+        <div class="col-md-9">
+            <div class="form-text-row">@Html.Raw(Model.BoxGenerator.BoxName)</div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-3">
+            <nop-label asp-for="BoxSize" />
+        </div>
+        <div class="col-md-9">
+            <div class="form-text-row">@Html.Raw(Model.BoxGenerator.BoxSize)</div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-3">
+            <nop-label asp-for="BoxContentWeight" />
+        </div>
+        <div class="col-md-9">
+            <div class="form-text-row">@Html.Raw(Model.BoxGenerator.BoxContentWeight)</div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-3">
+            <nop-label asp-for="BoxTotalWeight" />
+        </div>
+        <div class="col-md-9">
+            <div class="form-text-row">@Html.Raw(Model.BoxGenerator.BoxTotalWeight)</div>
+        </div>
+    </div>
+   
+    <div class="form-group">
+        <div class="col-md-3">
+            <nop-label asp-for="Height" />
+        </div>
+        <div class="col-md-9">
+            <div class="form-text-row">@Html.Raw(Model.BoxGenerator.Height)</div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-3">
+            <nop-label asp-for="Width" />
+        </div>
+        <div class="col-md-9">
+            <div class="form-text-row">@Html.Raw(Model.BoxGenerator.Width)</div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-3">
+            <nop-label asp-for="Length" />
+        </div>
+        <div class="col-md-9">
+            <div class="form-text-row">@Html.Raw(Model.BoxGenerator.Length)</div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-3">
+            <nop-label asp-for="VolumenBox" />
+        </div>
+        <div class="col-md-9">
+            <div class="form-text-row">@Html.Raw(Model.BoxGenerator.VolumenBox)</div>
+        </div>
+    </div>
+   
+</div>

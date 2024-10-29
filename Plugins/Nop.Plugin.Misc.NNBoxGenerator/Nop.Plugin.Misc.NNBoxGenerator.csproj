@@ -1,0 +1,83 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <OutputPath>..\..\Presentation\Nop.Web\Plugins\Misc.NNBoxGenerator</OutputPath>
+    <OutDir>$(OutputPath)</OutDir>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Libraries\Nop.Services\Nop.Services.csproj" />
+    <ProjectReference Include="..\..\Presentation\Nop.Web.Framework\Nop.Web.Framework.csproj" />
+    <ProjectReference Include="..\..\Presentation\Nop.Web\Nop.Web.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="logo.jpg" />
+    <None Remove="plugin.json" />
+    <None Remove="Views\Configure.cshtml" />
+    <None Remove="Views\_ViewImports.cshtml" />
+  </ItemGroup>
+  <PropertyGroup>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <ClearPluginAssemblies Include="$(MSBuildProjectDirectory)\..\..\Build\ClearPluginAssemblies.proj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Controllers\NNBoxGeneratorController.cs" />
+    <Compile Include="Controllers\PackingSummaryController.cs" />
+    <Compile Include="Data\BoxMap.cs" />
+    <Compile Include="Data\ItemPackedBoxMap.cs" />
+    <Compile Include="Data\ItemPackMap.cs" />
+    <Compile Include="Data\NNBoxGeneratorContext.cs" />
+    <Compile Include="Domain\BSBox.cs" />
+    <Compile Include="Domain\BSItemPack.cs" />
+    <Compile Include="Domain\BSItemPackedBox.cs" />
+    <Compile Include="Infrastructure\DependencyRegistrar.cs" />
+    <Compile Include="Infrastructure\PluginDbStartup.cs" />
+    <Compile Include="Models\AlgorithmBase\AlgorithmType.cs" />
+    <Compile Include="Models\BoxesSelectorSearchModel.cs" />
+    <Compile Include="Models\BoxGeneratorModel.cs" />
+    <Compile Include="Models\BoxSelectorListModel.cs" />
+    <Compile Include="Models\BSBoxModel.cs" />
+    <Compile Include="Models\ConfigurationModel.cs" />
+    <Compile Include="Models\PackingSummaryListModel.cs" />
+    <Compile Include="Models\PackingSummaryModel.cs" />
+    <Compile Include="Models\PackingSummarySearchModel.cs" />
+    <Compile Include="NNBoxGeneratorDefaults.cs" />
+    <Compile Include="NNBoxGeneratorPlugin.cs" />
+    <Compile Include="Services\BoxPackingService.cs" />
+    <Compile Include="Services\BoxSelectorAlgorithm.cs" />
+    <Compile Include="Services\IBoxPackingService.cs" />
+    <Compile Include="Services\IBoxSelectorAlgorithm.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="logo.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="plugin.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Configure.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\PackingSummary.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\View.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\_ViewImports.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+
+  <!-- This target execute after "Build" target -->
+  <Target Name="NopTarget" AfterTargets="Build">
+    <!-- Delete unnecessary libraries from plugins path -->
+    <MSBuild Projects="@(ClearPluginAssemblies)" Properties="PluginPath=$(MSBuildProjectDirectory)\$(OutDir)" Targets="NopClear" />
+  </Target>
+</Project>

@@ -1,0 +1,118 @@
+﻿@{
+    Layout = "";
+}
+@model Nop.Plugin.Payments.Manual.Models.PaymentInfoModel
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="row">
+            <div class="col-lg-6">
+                <label asp-for="CreditCardTypes">@T("Payment.SelectCreditCard"):</label>
+            </div>
+            <div class="col-lg-6">
+                <select asp-for="CreditCardType" asp-items="Model.CreditCardTypes" class="dropdownlists"></select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <label asp-for="CardholderName">@T("Payment.CardholderName"):</label>
+            </div>
+            <div class="col-lg-6">
+                <input type="text" asp-for="CardholderName" style="width: 100% !important;" autocomplete="off" />
+                <span asp-validation-for="CardholderName"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <label asp-for="CardNumber">@T("Payment.CardNumber"):</label>
+            </div>
+            <div class="col-lg-6">
+                <input type="text" asp-for="CardNumber" style="width:100% !important;" autocomplete="off" maxlength="16" onkeypress="return isNumber(event)" onchange="checkDigit(this)" />
+                <span asp-validation-for="CardNumber"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <label asp-for="ExpireMonth">@T("Payment.ExpirationDate"):</label>
+            </div>
+            <div class="col-lg-6">
+                <select asp-for="ExpireMonth" asp-items="Model.ExpireMonths"></select>
+                /
+                <select asp-for="ExpireYear" asp-items="Model.ExpireYears"></select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <label asp-for="CardCode">@T("Payment.CardCode"):</label>
+            </div>
+            <div class="col-lg-6">
+                <input type="text" asp-for="CardCode" style="width:60px;" autocomplete="off" maxlength="4" />
+                <span asp-validation-for="CardCode"></span>
+            </div>
+        </div>
+    </div>
+</div>
+@*<table width="100%" cellspacing="2" cellpadding="1" border="0">
+    <tr>
+        <td>
+            <label asp-for="CreditCardTypes">@T("Payment.SelectCreditCard"):</label>
+        </td>
+        <td>
+            <select asp-for="CreditCardType" asp-items="Model.CreditCardTypes" class="dropdownlists"></select>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label asp-for="CardholderName">@T("Payment.CardholderName"):</label>
+        </td>
+        <td>
+            <input type="text" asp-for="CardholderName" style="width:165px;" autocomplete="off" />
+            <span asp-validation-for="CardholderName"></span>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label asp-for="CardNumber">@T("Payment.CardNumber"):</label>
+        </td>
+        <td>
+            <input type="text" asp-for="CardNumber" style="width:165px;" autocomplete="off" maxlength="16" onkeypress="return isNumber(event)"  onchange="checkDigit(this)"/>
+            <span asp-validation-for="CardNumber"></span>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label asp-for="ExpireMonth">@T("Payment.ExpirationDate"):</label>
+        </td>
+        <td>
+            <select asp-for="ExpireMonth" asp-items="Model.ExpireMonths"></select>
+            /
+            <select asp-for="ExpireYear" asp-items="Model.ExpireYears"></select>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label asp-for="CardCode">@T("Payment.CardCode"):</label>
+        </td>
+        <td>
+            <input type="text" asp-for="CardCode" style="width:60px;" autocomplete="off" maxlength="4" />
+            <span asp-validation-for="CardCode"></span>
+        </td>
+    </tr>
+    <script>
+    function checkDigit(event){ 
+        var  str = document.getElementById(event.id).value;
+        for (var i = 0; i < str.length; i++) {
+            if (isNaN(str.charAt(i))) { //is not number
+                    document.getElementById(event.id).value = "";
+            }
+        }    
+    }
+    function isNumber(evt) {
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        }
+        return true;
+    }
+    </script>
+</table>*@

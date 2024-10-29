@@ -1,0 +1,84 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <Copyright>Copyright © Nop Solutions, Ltd</Copyright> 
+    <Company>Nop Solutions, Ltd</Company> 
+    <Authors>Nop Solutions, Ltd</Authors> 
+    <PackageLicenseUrl></PackageLicenseUrl> 
+    <PackageProjectUrl>https://www.nopcommerce.com/p/2320/authorizenet-payment-module.aspx</PackageProjectUrl> 
+    <RepositoryUrl>https://github.com/nopSolutions/Authorize.Net-plugin-for-nopcommerce</RepositoryUrl> 
+    <RepositoryType>Git</RepositoryType>
+	  <OutputPath>..\..\Presentation\Nop.Web\Plugins\Payments.AuthorizeNet</OutputPath>
+    <OutDir>$(OutputPath)</OutDir>
+	  <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+
+  <!--<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>..\..\Presentation\Nop.Web\Plugins\Payments.AuthorizeNet</OutputPath>
+  </PropertyGroup>-->
+    <PropertyGroup>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+</PropertyGroup>
+  <ItemGroup>
+    <None Remove="logo.jpg" />
+    <None Remove="plugin.json" />
+    <None Remove="Views\Configure.cshtml" />
+    <None Remove="Views\PaymentInfo.cshtml" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Include="AuthorizeNetPaymentProcessor.cs" />
+    <Compile Include="AuthorizeNetPaymentSettings.cs" />
+    <Compile Include="Components\AuthorizeNetViewComponent.cs" />
+    <Compile Include="Controllers\PaymentAuthorizeNetController.cs" />
+    <Compile Include="Models\ConfigurationModel.cs" />
+    <Compile Include="Models\IpnModel.cs" />
+    <Compile Include="Models\PaymentInfoModel.cs" />
+    <Compile Include="RouteProvider.cs" />
+    <Compile Include="TransactMode.cs" />
+    <Compile Include="Validators\PaymentInfoValidator.cs" />
+  </ItemGroup>
+  
+   <ItemGroup>
+    <Content Include="logo.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="plugin.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Configure.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\PaymentInfo.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\_ViewImports.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>    
+  </ItemGroup>
+  
+   <ItemGroup>
+     <None Include="AuthorizeNet.dll" />
+     <None Include="Notes.txt" />
+     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
+     <None Include="Properties\PublishProfiles\FolderProfile.pubxml.user" />
+   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Presentation\Nop.Web.Framework\Nop.Web.Framework.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="AuthorizeNet">
+      <HintPath>AuthorizeNet.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  
+  <!-- This target execute after "Build" target -->
+  <Target Name="NopTarget" AfterTargets="Build">
+    <!-- Delete unnecessary libraries from plugins path -->
+    <MSBuild Projects="$(MSBuildProjectDirectory)\..\..\Build\ClearPluginAssemblies.proj" Properties="PluginPath=$(MSBuildProjectDirectory)\$(OutDir)" Targets="NopClear" />
+  </Target>
+
+</Project>

@@ -1,0 +1,230 @@
+﻿@model ConfigurationModel
+@{
+    Layout = "_ConfigurePlugin";
+    var adminAreaSettings = EngineContext.Current.Resolve<AdminAreaSettings>();
+}
+<form asp-controller="NNDelivery" asp-action="Configure" method="post">
+    <div class="panel-group">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                @T("Nop.Plugin.Shipping.NNDelivery.FixedRate")
+            </div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <nop-label asp-for="FixedRate" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="FixedRate" />
+                        <span asp-validation-for="FixedRate"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-9 col-md-offset-3">
+                        <input type="submit" name="save" class="btn bg-blue" value="@T("Admin.Common.Save")" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<div class="panel-group">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            @T("Nop.Plugin.Shipping.NNDelivery.DeliveryRoutes")
+        </div>
+        <div class="panel-body">
+            <div class="sub-panel panel-search">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="DeliveryRoutesSearchModel.Name" />
+                                </div>
+                                <div class="col-md-9">
+                                    <input class="form-control text-box single-line" id="Name" name="Name" type="text">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="DeliveryRoutesSearchModel.Location" />
+                                </div>
+                                <div class="col-md-9">
+                                    <input class="form-control text-box single-line" id="Location" name="Location" type="text">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-9 col-md-offset-3">
+                                    <button type="button" id="search-deliveryroutes" class="btn btn-primary btn-search">
+                                        <i class="fa fa-search"></i>
+                                        @T("Admin.Common.Search")
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @await Html.PartialAsync("Table", new DataTablesModel
+            {
+                Name = "deliveryroutes-grid",
+                UrlRead = new DataUrl("List", "NNDelivery", null),
+                UrlDelete = new DataUrl("Delete", "NNDelivery", null),
+                UrlUpdate = new DataUrl("Edit", "NNDelivery", null),
+                SearchButtonId = "search-deliveryroutes",
+                Length = adminAreaSettings.DefaultGridPageSize,
+                LengthMenu = adminAreaSettings.GridPageSizes,
+                Filters = new List<FilterParameter>
+                         {
+                             new FilterParameter(nameof(DeliveryRoutesSearchModel.Name)),
+                             new FilterParameter(nameof(DeliveryRoutesSearchModel.Location))
+                         },
+                         ColumnCollection = new List<ColumnProperty>
+                         {
+                             new ColumnProperty(nameof(DeliveryRoutesModel.Name))
+                         {
+                             Title = T("Nop.Plugin.Shipping.NNDelivery.Fields.Name").Text,
+                             Editable = true,
+                             EditType = EditType.String
+                         },
+                         new ColumnProperty(nameof(DeliveryRoutesModel.Location))
+                         {
+                             Title = T("Nop.Plugin.Shipping.NNDelivery.Fields.Location").Text,
+                             Editable = true,
+                             EditType = EditType.String
+                         },
+                         new ColumnProperty(nameof(DeliveryRoutesModel.Minimum))
+                         {
+                             Title = T("Nop.Plugin.Shipping.NNDelivery.Fields.Minimum").Text,
+                             Editable = true,
+                             EditType = EditType.Number
+                         },
+                          new ColumnProperty(nameof(DeliveryRoutesModel.IdValueToSend))
+                         {
+                             Title = T("Nop.Plugin.Shipping.NNDelivery.Fields.IdValueToSend").Text,
+                             Editable = true,
+                             EditType = EditType.String
+                         },
+                          new ColumnProperty(nameof(DeliveryRoutesModel.ValueToSend))
+                         {
+                             Title = T("Nop.Plugin.Shipping.NNDelivery.Fields.ValueToSend").Text,
+                             Editable = true,
+                             EditType = EditType.String
+                         },
+                         new ColumnProperty(nameof(DeliveryRoutesModel.Available))
+                         {
+                             Title = T("Nop.Plugin.Shipping.NNDelivery.Fields.Available").Text,
+                             Editable = true,
+                             Render = new RenderBoolean(),
+                             ClassName = NopColumnClassDefaults.CenterAll,
+                             EditType = EditType.Checkbox
+                         },
+                         new ColumnProperty(nameof(DeliveryRoutesModel.Id))
+                         {
+                             Title = T("Admin.Common.Edit").Text,
+                             Width = "100",
+                             ClassName = NopColumnClassDefaults.Button,
+                             Render = new RenderButtonsInlineEdit()
+                         },
+                         new ColumnProperty(nameof(DeliveryRoutesModel.Id))
+                         {
+                             Title = T("Admin.Common.Delete").Text,
+                             Width = "100",
+                             ClassName = NopColumnClassDefaults.Button,
+                             Render = new RenderButtonRemove(T("Admin.Common.Delete").Text)
+                         }
+                     }
+                 })
+
+            <div class="panel panel-default no-margin">
+                <div class="panel-heading">
+                    @T("Admin.Common.AddNewRecord")
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <nop-label asp-for="@Model.AddDeliveryRoutesModel.Name" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="@Model.AddDeliveryRoutesModel.Name" />
+                            <span asp-validation-for="@Model.AddDeliveryRoutesModel.Name"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <nop-label asp-for="@Model.AddDeliveryRoutesModel.Location" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="@Model.AddDeliveryRoutesModel.Location" />
+                            <span asp-validation-for="@Model.AddDeliveryRoutesModel.Location"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <nop-label asp-for="@Model.AddDeliveryRoutesModel.Minimum" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="@Model.AddDeliveryRoutesModel.Minimum" />
+                            <span asp-validation-for="@Model.AddDeliveryRoutesModel.Minimum"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <nop-label asp-for="@Model.AddDeliveryRoutesModel.Available" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="@Model.AddDeliveryRoutesModel.Available" />
+                            <span asp-validation-for="@Model.AddDeliveryRoutesModel.Available"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-9 col-md-offset-3">
+                            <button type="button" id="addDeliveryroutes" class="btn btn-primary">@T("Admin.Common.AddNewRecord")</button>
+                        </div>
+                    </div>
+                </div>
+                <script>
+                    $(document).ready(function () {
+                        $('#addDeliveryroutes').click(function () {
+                            $('#addDeliveryroutes').attr('disabled', true);
+                            var postData = {
+                                Name: $("#@Html.IdFor(model => model.AddDeliveryRoutesModel.Name)").val(),
+                                Location: $("#@Html.IdFor(model => model.AddDeliveryRoutesModel.Location)").val(),
+                                Minimum: $("#@Html.IdFor(model => model.AddDeliveryRoutesModel.Minimum)").val(),
+                                Available: $("#@Html.IdFor(model => model.AddDeliveryRoutesModel.Available)").val()
+                            };
+                            addAntiForgeryToken(postData);
+
+                            $.ajax({
+                                cache: false,
+                                type: "POST",
+                                url: "@Html.Raw(Url.Action("Add", "NNDelivery"))",
+                                data: postData,
+                                success: function (data, textStatus, jqXHR) {
+                                    if (data.Result) {
+                                        //reload grid
+                                        updateTable('#deliveryroutes-grid');
+
+                                        //clear input value
+                                        $("#@Html.IdFor(model => model.AddDeliveryRoutesModel.Name)").val('');
+                                        $("#@Html.IdFor(model => model.AddDeliveryRoutesModel.Location)").val('');
+                                        $("#@Html.IdFor(model => model.AddDeliveryRoutesModel.Minimum)").val('');
+                                        $("#@Html.IdFor(model => model.AddDeliveryRoutesModel.Available)").val('');
+                                    } else {
+                                        //display errors if returned
+                                        display_nop_error(data);
+                                    }
+                                },
+                                complete: function (jqXHR, textStatus) {
+                                    $('#addDeliveryroutes').attr('disabled', false);
+                                }
+                            });
+                        });
+                    });
+                </script>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,164 @@
+﻿@model ConfigurationModel
+@{
+    Layout = "_ConfigurePlugin";
+}
+<form asp-controller="NetSuiteConnector" asp-action="Configure" method="post">
+    <div class="panel-group">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                @T("Plugins.Misc.NetSuiteConnector.ConnectorConfig")
+            </div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <nop-label asp-for="Enabled" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="Enabled" />
+                        <span asp-validation-for="Enabled"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <nop-label asp-for="AccountId" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="AccountId" />
+                        <span asp-validation-for="AccountId"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <nop-label asp-for="ConsumerKey" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="ConsumerKey" />
+                        <span asp-validation-for="ConsumerKey"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <nop-label asp-for="ConsumerSecret" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="ConsumerSecret" />
+                        <span asp-validation-for="ConsumerSecret"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <nop-label asp-for="TokenId" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="TokenId" />
+                        <span asp-validation-for="TokenId"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <nop-label asp-for="TokenSecret" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="TokenSecret" />
+                        <span asp-validation-for="TokenSecret"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <nop-label asp-for="CompanyUrl" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="CompanyUrl" />
+                        <span asp-validation-for="CompanyUrl"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <nop-label asp-for="RestServicesUrl" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="RestServicesUrl" />
+                        <span asp-validation-for="RestServicesUrl"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-9 col-md-offset-3">
+                        <input type="submit" name="save" class="btn bg-blue" value="@T("Admin.Common.Save")" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel-group">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                @T("Plugins.Misc.NetSuiteConnector.Media")
+            </div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <nop-label asp-for="AccessKeyID" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="AccessKeyID" />
+                        <span asp-validation-for="AccessKeyID"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <nop-label asp-for="SecretAccessKey" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="SecretAccessKey" />
+                        <span asp-validation-for="SecretAccessKey"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <nop-label asp-for="S3Region" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="S3Region" />
+                        <span asp-validation-for="S3Region"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <nop-label asp-for="DefaultS3Folder" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="DefaultS3Folder" />
+                        <span asp-validation-for="DefaultS3Folder"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <nop-label asp-for="ImagesTempFolder" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="ImagesTempFolder" />
+                        <span asp-validation-for="ImagesTempFolder"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <nop-label asp-for="ImageTypes" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="ImageTypes" />
+                        <span asp-validation-for="ImageTypes"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-9 col-md-offset-3">
+                        <input type="submit" name="save" class="btn bg-blue" value="@T("Admin.Common.Save")" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+@{
+    Html.SetActiveMenuItemSystemName(NetSuiteConnectorDefaults.ConfigurationMenuSystemName);
+}

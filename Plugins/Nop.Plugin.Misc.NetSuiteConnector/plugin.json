@@ -1,0 +1,11 @@
+﻿{
+  "Group": "Misc",
+  "FriendlyName": "NetSuite Connector",
+  "SystemName": "Misc.NetSuiteConnector",
+  "Version": "1.0",
+  "SupportedVersions": [ "4.20" ],
+  "Author": "PersonalSoft",
+  "DisplayOrder": 1,
+  "FileName": "Nop.Plugin.Misc.NetSuiteConnector.dll",
+  "Description": "This plugin allows to integrate with Net Suit"
+}

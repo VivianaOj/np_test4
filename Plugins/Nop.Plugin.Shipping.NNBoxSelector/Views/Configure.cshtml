@@ -1,0 +1,297 @@
+﻿@using Nop.Plugin.Shipping.NNBoxSelector.Models
+
+@model Nop.Plugin.Shipping.NNBoxSelector.Models.ConfigurationModel
+@{
+    Layout = "_ConfigurePlugin";
+    var adminAreaSettings = EngineContext.Current.Resolve<AdminAreaSettings>();
+}
+<div class="panel-group">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            @T("Nop.Plugin.Shipping.NNBoxSelector")
+        </div>
+        <div class="panel-body">
+            <div class="sub-panel panel-search">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    <label>@T("NNBoxSelector.InsuranceSurcharge")</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <input class="form-control text-box single-line" value="@Model.NNBoxSettings.InsuranceSurcharge" id="InsuranceSurcharge" name="InsuranceSurcharge" type="text">
+                                </div>
+                                <div class="col-md-9 col-md-offset-3">
+                                    <button type="button" id="SaveInsuranceSurcharge" class="btn btn-primary">
+                                        @T("Admin.Common.Save")
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="BoxesSelectorSearchModel.Name" />
+                                </div>
+                                <div class="col-md-9">
+                                    <input class="form-control text-box single-line" id="Name" name="Name" type="text">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-9 col-md-offset-3">
+                                    <button type="button" id="search-deliveryroutes" class="btn btn-primary btn-search">
+                                        <i class="fa fa-search"></i>
+                                        @T("Admin.Common.Search")
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @await Html.PartialAsync("Table", new DataTablesModel
+            {
+                Name = "BSBoxModel-grid",
+                UrlRead = new DataUrl("List", "NNBoxSelector", null),
+                UrlDelete = new DataUrl("Delete", "NNBoxSelector", null),
+                UrlUpdate = new DataUrl("Edit", "NNBoxSelector", null),
+                SearchButtonId = "search-BSBoxModel",
+                Length = adminAreaSettings.DefaultGridPageSize,
+                LengthMenu = adminAreaSettings.GridPageSizes,
+                Filters = new List<FilterParameter>
+                    {
+                        new FilterParameter(nameof(BoxesSelectorSearchModel.Name)),
+                    },
+                    ColumnCollection = new List<ColumnProperty>
+                    {
+                        new ColumnProperty(nameof(BSBoxModel.Name))
+                    {
+                        Title = T("Nop.Plugin.Shipping.NNBoxSelector.Fields.Name").Text,
+                        Editable = true,
+                        EditType = EditType.String
+                    },
+                    new ColumnProperty(nameof(BSBoxModel.Length))
+                    {
+                        Title = T("Nop.Plugin.Shipping.NNBoxSelector.Fields.Length").Text,
+                        Editable = true,
+                        EditType = EditType.String
+                    },
+                    new ColumnProperty(nameof(BSBoxModel.Height))
+                    {
+                        Title = T("Nop.Plugin.Shipping.NNBoxSelector.Fields.Height").Text,
+                        Editable = true,
+                        EditType = EditType.Number
+                    },
+                    new ColumnProperty(nameof(BSBoxModel.Width))
+                    {
+                        Title = T("Nop.Plugin.Shipping.NNBoxSelector.Fields.Width").Text,
+                        Editable = true,
+                        EditType = EditType.String
+                    },
+                    new ColumnProperty(nameof(BSBoxModel.Weigth))
+                    {
+                        Title = T("Nop.Plugin.Shipping.NNBoxSelector.Fields.Weigth").Text,
+                        Editable = true,
+                        EditType = EditType.String
+                    },
+                    new ColumnProperty(nameof(BSBoxModel.VolumenBox))
+                    {
+                        Title = T("Nop.Plugin.Shipping.NNBoxSelector.Fields.Volume").Text,
+                        Editable = false,
+                        EditType = EditType.String
+                    },
+                    new ColumnProperty(nameof(BSBoxModel.Active))
+                    {
+                        Title = T("Nop.Plugin.Shipping.NNBoxSelector.Fields.Active").Text,
+                        Editable = true,
+                        Render = new RenderBoolean(),
+                        ClassName = NopColumnClassDefaults.CenterAll,
+                        EditType = EditType.Checkbox
+                    },
+                    new ColumnProperty(nameof(BSBoxModel.Id))
+                    {
+                        Title = T("Admin.Common.Edit").Text,
+                        Width = "100",
+                        ClassName = NopColumnClassDefaults.Button,
+                        Render = new RenderButtonsInlineEdit()
+                    },
+                    new ColumnProperty(nameof(BSBoxModel.Id))
+                    {
+                        Title = T("Admin.Common.Delete").Text,
+                        Width = "100",
+                        ClassName = NopColumnClassDefaults.Button,
+                        Render = new RenderButtonRemove(T("Admin.Common.Delete").Text)
+                    }
+                }
+
+            })
+
+            <div class="panel panel-default no-margin">
+                <div class="panel-heading">
+                    @T("Admin.Common.AddNewRecord")
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <nop-label asp-for="@Model.AddBoxModel.Name" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="@Model.AddBoxModel.Name" />
+                            <span asp-validation-for="@Model.AddBoxModel.Name"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <nop-label asp-for="@Model.AddBoxModel.Length" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="@Model.AddBoxModel.Length" onchange="CalculateVolume()" />
+                            <span asp-validation-for="@Model.AddBoxModel.Length"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <nop-label asp-for="@Model.AddBoxModel.Width" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="@Model.AddBoxModel.Width"  onchange="CalculateVolume()"/>
+                            <span asp-validation-for="@Model.AddBoxModel.Width"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <nop-label asp-for="@Model.AddBoxModel.Height" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="@Model.AddBoxModel.Height"  onchange="CalculateVolume()"/>
+                            <span asp-validation-for="@Model.AddBoxModel.Height"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <nop-label asp-for="@Model.AddBoxModel.Weigth" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="@Model.AddBoxModel.Weigth" />
+                            <span asp-validation-for="@Model.AddBoxModel.Weigth"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <nop-label asp-for="@Model.AddBoxModel.VolumenBox" />
+                        </div>
+                        <div class="col-md-9">
+                            <input asp-for="@Model.AddBoxModel.VolumenBox" readonly="readonly"  disabled/>
+                            <span asp-validation-for="@Model.AddBoxModel.VolumenBox"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <nop-label asp-for="@Model.AddBoxModel.Active" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="@Model.AddBoxModel.Active" />
+                            <span asp-validation-for="@Model.AddBoxModel.Active"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-9 col-md-offset-3">
+                            <button type="button" id="AddBoxModel" class="btn btn-primary">@T("Admin.Common.AddNewRecord")</button>
+                        </div>
+                    </div>
+                </div>
+                <script>
+                    $(document).ready(function () {
+                        $('#AddBoxModel').click(function () {
+                            $('#AddBoxModel').attr('disabled', true);
+                            var postData = {
+                                Name: $("#@Html.IdFor(model => model.AddBoxModel.Name)").val(),
+                                Length: $("#@Html.IdFor(model => model.AddBoxModel.Length)").val(),
+                                Width: $("#@Html.IdFor(model => model.AddBoxModel.Width)").val(),
+                                Height: $("#@Html.IdFor(model => model.AddBoxModel.Height)").val(),
+                                Weigth: $("#@Html.IdFor(model => model.AddBoxModel.Weigth)").val(),
+                                VolumenBox: $("#@Html.IdFor(model => model.AddBoxModel.VolumenBox)").val(),
+                                Active: $("#@Html.IdFor(model => model.AddBoxModel.Active)").val()
+
+
+                            };
+                            addAntiForgeryToken(postData);
+
+                            $.ajax({
+                                cache: false,
+                                type: "POST",
+                                url: "@Html.Raw(Url.Action("Add", "NNBoxSelector"))",
+                                data: postData,
+                                success: function (data, textStatus, jqXHR) {
+                                    if (data.Result) {
+                                        //reload grid
+                                        updateTable('#BSBoxModel-grid');
+
+                                        //clear input value
+                                        $("#@Html.IdFor(model => model.AddBoxModel.Name)").val('');
+                                        $("#@Html.IdFor(model => model.AddBoxModel.Length)").val('');
+                                        $("#@Html.IdFor(model => model.AddBoxModel.Height)").val('');
+                                        $("#@Html.IdFor(model => model.AddBoxModel.Width)").val('');
+                                        $("#@Html.IdFor(model => model.AddBoxModel.Weigth)").val('');
+                                        $("#@Html.IdFor(model => model.AddBoxModel.VolumenBox)").val('');
+                                        $("#@Html.IdFor(model => model.AddBoxModel.Active)").val('');
+
+                                    } else {
+                                        //display errors if returned
+                                        display_nop_error(data);
+                                    }
+                                },
+                                complete: function (jqXHR, textStatus) {
+                                    $('#AddBoxModel').attr('disabled', false);
+                                }
+                            });
+                        });
+
+                        $("#SaveInsuranceSurcharge").click(function () {
+                            var InsuranceSurcharge = {
+                                InsuranceSurcharge: $("#InsuranceSurcharge").val()
+                            };
+
+                            $.ajax({
+                                cache: false,
+                                type: "POST",
+                                url: "@Html.Raw(Url.Action("SaveInsuranceSurcharge", "NNBoxSelector"))",
+                                data: InsuranceSurcharge,
+                                success: function (data, textStatus, jqXHR) {
+                                    if (data.Result) {
+                                        
+
+                                    } else {
+                                        //display errors if returned
+                                        display_nop_error(data);
+                                    }
+                                },
+                                complete: function (jqXHR, textStatus) {
+                                    $('#AddBoxModel').attr('disabled', false);
+                                }
+                            });
+                        });
+                    });
+                    $("#AddBoxModel_Length").change(function () {
+                        CalculateVolume();
+                    });
+                    $("#AddBoxModel_Width").change(function () {
+                        CalculateVolume();
+                    });
+                    $("#AddBoxModel_Height").change(function () {
+                        CalculateVolume();
+                    });
+                    function CalculateVolume() {
+                        var vol = 0;
+
+                        var Length = $("#AddBoxModel_Length").val();
+                        var Width = $("#AddBoxModel_Width").val();
+                        var Height = $("#AddBoxModel_Height").val();
+                        vol = Length * Width * Height;
+                        $("#AddBoxModel_VolumenBox").val(vol);
+                    }
+                </script>
+            </div>
+        </div>
+    </div>
+</div>

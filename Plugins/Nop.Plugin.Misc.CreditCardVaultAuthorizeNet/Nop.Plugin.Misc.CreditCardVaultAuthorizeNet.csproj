@@ -1,0 +1,77 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework> 
+    <OutputPath>..\..\Presentation\Nop.Web\Plugins\Misc.CreditCardVaultAuthorizeNet</OutputPath>
+    <OutDir>$(OutputPath)</OutDir>
+	<!--Set this parameter to true to get the dlls copied from the NuGet cache to the output of your project.
+    You need to set this parameter to true if your plugin has a nuget package 
+    to ensure that the dlls copied from the NuGet cache to the output of your project-->
+    <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="logo.png" />
+    <None Remove="plugin.json" />
+    <None Remove="Views\Configure.cshtml" />
+    <None Remove="Views\_ViewImports.cshtml" />
+  </ItemGroup>
+<PropertyGroup>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+</PropertyGroup>
+  <ItemGroup>    
+    <ClearPluginAssemblies Include="$(MSBuildProjectDirectory)\..\..\Build\ClearPluginAssemblies.proj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Controllers\CreditCardVaultAuthorizeNetController.cs" />
+    <Compile Include="CreditCardVaultAuthorizeNetPlugin.cs" />
+    <Compile Include="CreditCardVaultAuthorizeNetSettings.cs" />
+    <Compile Include="Infrastructure\DependencyRegistrar.cs" />
+    <Compile Include="Models\ConfigurationModel.cs" />
+    <Compile Include="Models\CreditCardModel.cs" />
+    <Compile Include="Models\MesaggesModel.cs" />
+    <Compile Include="Models\MessageModel.cs" />
+    <Compile Include="Models\PaymentModel.cs" />
+    <Compile Include="Models\PaymentProfile.cs" />
+    <Compile Include="Models\PaymentProfilesModel.cs" />
+    <Compile Include="Models\ProfileModel.cs" />
+    <Compile Include="Models\Requests\CreateCustomerPaymentProfileRequest.cs" />
+    <Compile Include="Models\Requests\CreateCustomerPaymentProfileRequestModel.cs" />
+    <Compile Include="Models\Requests\CreateCustomerProfileRequest.cs" />
+    <Compile Include="Models\Requests\CreateCustomerProfileRequestModel.cs" />
+    <Compile Include="Models\Responses\ResponseGetCustomerPaymentProfileModel.cs" />
+    <Compile Include="Services\CreditCardVaultService.cs" />
+    <Compile Include="Services\CustomerAuthorizeNet.cs" />
+    <Compile Include="Services\CustomerAuthorizeNetService.cs" />
+    <Compile Include="Services\ICreditCardVaultService.cs" />
+    <Compile Include="Services\ICustomerAuthorizeNet.cs" />
+    <Compile Include="Services\ICustomerAuthorizeNetService.cs" />
+    <Compile Include="Services\OverriddenOrderProcessingService.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="logo.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="plugin.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Configure.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\_ViewImports.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Libraries\Nop.Services\Nop.Services.csproj" />
+    <ProjectReference Include="..\..\Presentation\Nop.Web.Framework\Nop.Web.Framework.csproj" />
+    <ProjectReference Include="..\..\Presentation\Nop.Web\Nop.Web.csproj" />
+  </ItemGroup>
+
+  <!-- This target execute after "Build" target -->
+  <Target Name="NopTarget" AfterTargets="Build">
+    <!-- Delete unnecessary libraries from plugins path -->
+    <MSBuild Projects="@(ClearPluginAssemblies)" Properties="PluginPath=$(MSBuildProjectDirectory)\$(OutDir)" Targets="NopClear" />
+  </Target>
+</Project>
